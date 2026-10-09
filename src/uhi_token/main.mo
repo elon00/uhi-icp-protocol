@@ -139,7 +139,6 @@ shared ({ caller = initializer }) actor class UhiToken() = this {
   public query func icrc1_supported_standards() : async [StandardRecord] {
     [
       { name = "ICRC-1"; url = "https://github.com/dfinity/ICRC-1/tree/main/standards/ICRC-1" },
-      { name = "ICRC-2"; url = "https://github.com/dfinity/ICRC-1/tree/main/standards/ICRC-2" },
       { name = "UHI-Elastic-Abundance"; url = "https://github.com/elon00/uhi-icp-protocol" }
     ]
   };
@@ -153,6 +152,8 @@ shared ({ caller = initializer }) actor class UhiToken() = this {
     if (not isAuthorized(caller)) {
       return #Err("Caller is not authorized to mint UHI");
     };
+
+    return #Err("DISABLED: unverified productivity proof and unsafe custom-ledger minting");
 
     if (amount == 0) {
       return #Err("Amount must be greater than zero");
