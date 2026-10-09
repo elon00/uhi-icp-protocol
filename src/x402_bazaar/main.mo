@@ -84,7 +84,8 @@ shared ({ caller = initializer }) actor class X402Bazaar() = this {
     });
   };
 
-  initFlagshipServices();
+  // No real providers or fleet contracts are verified; no synthetic service metrics.
+  // initFlagshipServices();
 
   public shared ({ caller }) func set_treasury_canister(treasury : Principal) : async { #Ok : Bool; #Err : Text } {
     if (caller != admin) {
@@ -132,55 +133,7 @@ shared ({ caller = initializer }) actor class X402Bazaar() = this {
   };
 
   public shared ({ caller }) func execute_402_payment(service_id : Nat) : async { #Ok : PaymentReceipt; #Err : Text } {
-    if (service_id >= services.size()) {
-      return #Err("Service not found");
-    };
-
-    let item = services.get(service_id);
-    if (not item.is_active) {
-      return #Err("Service is currently inactive");
-    };
-
-    let gross = item.cost_per_call;
-    // 10% Protocol Tax for Universal High Income human dividend
-    let tax = gross / 10;
-    let net = gross - tax;
-
-    let txId = receipts.size();
-    let now = Nat64.fromIntWrap(Time.now());
-    let proof = "PROOF_X402_" # Nat.toText(txId) # "_" # Nat.toText(gross) # "_DIVIDEND_TAXED";
-
-    let receipt : PaymentReceipt = {
-      transaction_id = txId;
-      service_id = service_id;
-      consumer = caller;
-      provider = item.provider;
-      gross_amount = gross;
-      uhi_tax_amount = tax;
-      net_amount = net;
-      timestamp = now;
-      settlement_proof = proof;
-    };
-
-    receipts.add(receipt);
-
-    // Update service invocations
-    let updatedItem : ServiceItem = {
-      id = item.id;
-      provider = item.provider;
-      title = item.title;
-      description = item.description;
-      cost_per_call = item.cost_per_call;
-      category = item.category;
-      total_invocations = item.total_invocations + 1;
-      is_active = item.is_active;
-    };
-    services.put(service_id, updatedItem);
-
-    total_volume += gross;
-    total_tax_routed += tax;
-
-    #Ok(receipt)
+    #Err("DISABLED: settlement requires verified ICRC ledger transfer, tax split and replay protection")
   };
 
   public query func get_bazaar_stats() : async BazaarStats {

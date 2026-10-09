@@ -64,6 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const servicesContainer = document.getElementById('services-container');
 
+  // Explicitly distinguish illustrative figures from verified on-chain balances.
+  ['metric-total-supply','metric-treasury-balance','metric-citizens'].forEach(id => { const el = document.getElementById(id); if (el) el.innerText = 'Not verified'; });
+
   // Initialize QR Code
   function renderQr(text) {
     if (window.NativeQrSvg) {
@@ -177,19 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.invoke-service-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const id = parseInt(btn.getAttribute('data-id'));
-        const srv = state.services.find(s => s.id === id);
-        if (srv) {
-          srv.invocations++;
-          state.treasuryBalance += srv.tax;
-          state.totalSupply += srv.tax; // Elastic mint backed by verified compute productivity
-
-          elTreasury.innerText = `${state.treasuryBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })} UHI`;
-          elTotalSupply.innerText = `${state.totalSupply.toLocaleString('en-US', { minimumFractionDigits: 2 })} UHI`;
-
-          btn.innerText = '✓ Settled & Taxed';
-          setTimeout(() => { btn.innerText = '⚡ Execute Call'; }, 1000);
-        }
+        alert('Service settlement is unavailable: no verified on-chain ledger payment adapter is connected.');
       });
     });
   }
@@ -197,36 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // UHI Claim Action
   claimBtn.addEventListener('click', () => {
-    if (!state.wallet || !state.wallet.isConnected) {
-      walletModal.classList.add('open');
-      claimStatusMsg.className = 'status-msg error';
-      claimStatusMsg.innerText = 'Please connect your Web3 / Internet Identity wallet first.';
-      return;
-    }
-
-    if (state.isClaimed) {
-      claimStatusMsg.className = 'status-msg error';
-      claimStatusMsg.innerText = 'UHI Human Dividend already claimed for Epoch #1.';
-      return;
-    }
-
-    const payout = (state.basePayout * state.currentMultiplier).toFixed(2);
-    claimBtn.innerText = 'Verifying NIST FIPS 204 PQC Proof...';
-    claimBtn.disabled = true;
-
-    setTimeout(() => {
-      state.isClaimed = true;
-      claimBtn.innerText = '✓ Claimed Successfully';
-      claimBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-      claimBtn.disabled = false;
-
-      claimStatusMsg.className = 'status-msg success';
-      claimStatusMsg.innerHTML = `
-        <strong>SUCCESS:</strong> ${payout} UHI disbursed to ${state.wallet.principal}!<br>
-        <strong>Proof:</strong> 0xPQC_FIPS204_LATTICE_OK_${Date.now()}<br>
-        <strong>Reverse-Gas:</strong> $0.00 Gas Fee charged.
-      `;
-    }, 700);
+    claimStatusMsg.className = 'status-msg error';
+    claimStatusMsg.innerText = 'Claiming is unavailable until verified on-chain distribution, identity and cryptographic proof verification are connected.';
   });
 
   // Multimodal AI Assistant Widget

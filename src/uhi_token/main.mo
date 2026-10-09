@@ -139,33 +139,19 @@ shared ({ caller = initializer }) actor class UhiToken() = this {
   public query func icrc1_supported_standards() : async [StandardRecord] {
     [
       { name = "ICRC-1"; url = "https://github.com/dfinity/ICRC-1/tree/main/standards/ICRC-1" },
-      { name = "ICRC-2"; url = "https://github.com/dfinity/ICRC-1/tree/main/standards/ICRC-2" },
       { name = "UHI-Elastic-Abundance"; url = "https://github.com/elon00/uhi-icp-protocol" }
     ]
   };
 
   // Productivity-Backed Elastic Emission
+  // Explicitly fail closed until verified off-chain evidence and authorized
+  // on-ledger minting are implemented and independently tested.
   public shared ({ caller }) func mint_elastic_productivity(
     to : Account,
     amount : Nat,
     proof_hash : Text
   ) : async { #Ok : Nat; #Err : Text } {
-    if (not isAuthorized(caller)) {
-      return #Err("Caller is not authorized to mint UHI");
-    };
-
-    if (amount == 0) {
-      return #Err("Amount must be greater than zero");
-    };
-
-    let recipientKey = Principal.toText(to.owner);
-    let currentBal = Option.get(balances.get(recipientKey), 0);
-
-    balances.put(recipientKey, currentBal + amount);
-    total_supply += amount;
-    total_minted_productivity += amount;
-
-    #Ok(total_supply)
+    #Err("DISABLED: unverified productivity proof and unsafe custom-ledger minting")
   };
 
   // Deflationary Burn
