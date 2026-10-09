@@ -23,8 +23,12 @@ jobs:
         run: |
           dfx --version
           dfx cache show
+      - name: Start isolated local ICP replica (no mainnet cycles)
+        run: dfx start --background --clean
+      - name: Create local canister IDs required by dfx build
+        run: dfx canister create --all --network local
       - name: Compile real Motoko and asset canisters
-        run: dfx build
+        run: dfx build --network local
       - name: Summarize scope
         if: always()
         run: |
