@@ -1,35 +1,28 @@
-name: UHI Protocol CI
-
+name: UHI Protocol CI (Development)
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master, safety/english-reality-gates]
   pull_request:
-    branches: [ main, master ]
-
+    branches: [main, master]
+permissions:
+  contents: read
 jobs:
-  test-and-validate:
+  development-tests:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Real Mainnet Readiness (fail closed until genuine integrations exist)
-        run: python scripts/reality_gate.py
-
-      - name: Run Core Invariant Tests
+      - name: Python model tests (not canister integration)
         run: |
           python tests/simulate_protocol.py
-
-      - name: Run Advanced Protocol & PQC/Conway Tests
-        run: |
           python tests/simulate_advanced_protocol.py
-
-      - name: Validate Candid Interfaces & DFX Configuration
+      - name: Financial safety regression tests
+        run: python -m unittest discover -s tests -p test_safety_regression.py -v
+      - name: DFX configuration sanity (not Candid typecheck)
+        run: python -c "import json; c=json.load(open('dfx.json')); assert len(c['canisters']) == 8"
+      - name: Show production readiness is separately blocked
         run: |
-          python -c "import json; f = open('dfx.json'); cfg = json.load(f); assert len(cfg['canisters']) == 8; print('dfx.json canister count verified: 8 canisters present.')"
+          echo 'Development tests only. This job does NOT certify ICP mainnet readiness.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Strict fail-closed release gate: One-Click UHI Reality Verification.' >> "$GITHUB_STEP_SUMMARY"
