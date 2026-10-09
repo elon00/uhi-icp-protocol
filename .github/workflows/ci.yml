@@ -19,6 +19,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Real Mainnet Readiness (fail closed until genuine integrations exist)
+        run: python scripts/reality_gate.py
+
       - name: Run Core Invariant Tests
         run: |
           python tests/simulate_protocol.py
