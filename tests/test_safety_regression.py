@@ -21,6 +21,10 @@ class SafetyRegression(unittest.TestCase):
         s=(R/"src/identity_registry/main.mo").read_text()
         self.assertIn("tier = #Unverified;",s)
         self.assertNotIn("tier = #PostQuantumBiometric; // Verified via WebAuthn + PQC",s)
+    def test_custom_token_does_not_claim_unimplemented_icrc2(self):
+        s=(R/"src/uhi_token/main.mo").read_text()
+        self.assertNotIn('{ name = "ICRC-2";',s)
+        self.assertIn("DISABLED: unverified productivity proof",s)
     def test_no_wallet_spoofing(self):
         s=(R/"src/frontend/wallet.js").read_text()
         self.assertIn("no synthetic principals permitted",s)
