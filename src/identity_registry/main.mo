@@ -62,7 +62,7 @@ shared ({ caller = initializer }) actor class IdentityRegistry() = this {
 
     citizens.put(caller, profile);
     total_citizens_count += 1;
-    active_humans_count += 1;
+    // Do not count an unverified registration as a verified active human.
 
     #Ok(profile)
   };
