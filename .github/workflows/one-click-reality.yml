@@ -1,0 +1,29 @@
+name: One-Click UHI Reality Verification
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, safety/english-reality-gates]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  no-cycle-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify Python models (not real canister execution)
+        run: |
+          python tests/simulate_protocol.py
+          python tests/simulate_advanced_protocol.py
+      - name: Verify real-world deployment gates (EXPECTED TO BLOCK until implementations exist)
+        run: python scripts/reality_gate.py
+      - name: Publish reality-gate summary
+        if: always()
+        run: |
+          echo '## UHI deployment decision' >> "$GITHUB_STEP_SUMMARY"
+          echo 'No ICP mainnet deployment occurs in this workflow.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Any failed reality gate is an actual production blocker; do not bypass it to make CI green.' >> "$GITHUB_STEP_SUMMARY"
