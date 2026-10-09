@@ -19,6 +19,8 @@ jobs:
         run: |
           python tests/simulate_protocol.py
           python tests/simulate_advanced_protocol.py
+      - name: Check financial fail-closed regression guards
+        run: python -m unittest discover -s tests -p test_safety_regression.py -v
       - name: Verify real-world deployment gates (EXPECTED TO BLOCK until implementations exist)
         run: python scripts/reality_gate.py
       - name: Publish reality-gate summary
