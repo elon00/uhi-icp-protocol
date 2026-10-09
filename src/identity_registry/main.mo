@@ -53,7 +53,7 @@ shared ({ caller = initializer }) actor class IdentityRegistry() = this {
 
     let profile : CitizenProfile = {
       principal_id = caller;
-      tier = #PostQuantumBiometric; // Verified via WebAuthn + PQC
+      tier = #Unverified; // Authentication/registration alone does not prove humanity
       registered_at = Nat64.fromIntWrap(Time.now());
       last_claim_epoch = 0;
       pqc_public_key_hash = pqc_pubkey_hash;
