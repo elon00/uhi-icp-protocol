@@ -1,0 +1,33 @@
+type ClaimRecord = record {
+  citizen : principal;
+  epoch : nat;
+  amount : nat;
+  conway_multiplier_bps : nat;
+  timestamp : nat64;
+  pqc_proof : text;
+};
+
+type EpochInfo = record {
+  epoch_number : nat;
+  base_payout : nat;
+  dynamic_multiplier_bps : nat;
+  effective_payout : nat;
+  total_claims_in_epoch : nat;
+  total_disbursed_in_epoch : nat;
+  is_active : bool;
+};
+
+type DistributionStats = record {
+  current_epoch : nat;
+  total_all_time_claims : nat;
+  total_all_time_disbursed : nat;
+  active_epoch_info : EpochInfo;
+};
+
+service : {
+  start_next_epoch : (conway_multiplier_bps : nat) -> (variant { Ok : EpochInfo; Err : text });
+  claim_uhi_dividend : (pqc_proof : text) -> (variant { Ok : ClaimRecord; Err : text });
+  get_current_epoch_info : () -> (EpochInfo) query;
+  get_distribution_stats : () -> (DistributionStats) query;
+  set_base_payout : (amount : nat) -> (variant { Ok : bool; Err : text });
+}

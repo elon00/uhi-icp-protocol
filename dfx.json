@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "canisters": {
+    "uhi_token": {
+      "type": "motoko",
+      "main": "src/uhi_token/main.mo",
+      "candid": "src/uhi_token/uhi_token.did"
+    },
+    "treasury": {
+      "type": "motoko",
+      "main": "src/treasury/main.mo",
+      "candid": "src/treasury/treasury.did"
+    },
+    "identity_registry": {
+      "type": "motoko",
+      "main": "src/identity_registry/main.mo",
+      "candid": "src/identity_registry/identity_registry.did"
+    },
+    "distribution_engine": {
+      "type": "motoko",
+      "main": "src/distribution_engine/main.mo",
+      "candid": "src/distribution_engine/distribution_engine.did"
+    },
+    "x402_bazaar": {
+      "type": "motoko",
+      "main": "src/x402_bazaar/main.mo",
+      "candid": "src/x402_bazaar/x402_bazaar.did"
+    },
+    "conway_engine": {
+      "type": "motoko",
+      "main": "src/conway_engine/main.mo",
+      "candid": "src/conway_engine/conway_engine.did"
+    },
+    "pqc_layer": {
+      "type": "motoko",
+      "main": "src/pqc_layer/main.mo",
+      "candid": "src/pqc_layer/pqc_layer.did"
+    },
+    "frontend": {
+      "type": "assets",
+      "source": [
+        "src/frontend"
+      ]
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:4943",
+      "type": "ephemeral"
+    },
+    "ic": {
+      "providers": [
+        "https://ic0.app"
+      ],
+      "type": "persistent"
+    }
+  }
+}

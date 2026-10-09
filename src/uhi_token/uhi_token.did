@@ -1,0 +1,60 @@
+type Subaccount = blob;
+
+type Account = record {
+  owner : principal;
+  subaccount : opt Subaccount;
+};
+
+type Value = variant {
+  Nat : nat;
+  Int : int;
+  Text : text;
+  Blob : blob;
+};
+
+type TransferArgs = record {
+  from_subaccount : opt Subaccount;
+  to : Account;
+  amount : nat;
+  fee : opt nat;
+  memo : opt blob;
+  created_at_time : opt nat64;
+};
+
+type TransferError = variant {
+  BadFee : record { expected_fee : nat };
+  BadBurn : record { min_burn_amount : nat };
+  InsufficientFunds : record { balance : nat };
+  TooOld;
+  CreatedInFuture : record { ledger_time : nat64 };
+  Duplicate : record { duplicate_of : nat };
+  TemporarilyUnavailable;
+  GenericError : record { error_code : nat; message : text };
+};
+
+type TransferResult = variant {
+  Ok : nat;
+  Err : TransferError;
+};
+
+type StandardRecord = record {
+  name : text;
+  url : text;
+};
+
+service : {
+  icrc1_name : () -> (text) query;
+  icrc1_symbol : () -> (text) query;
+  icrc1_decimals : () -> (nat8) query;
+  icrc1_fee : () -> (nat) query;
+  icrc1_total_supply : () -> (nat) query;
+  icrc1_minting_account : () -> (opt Account) query;
+  icrc1_balance_of : (Account) -> (nat) query;
+  icrc1_transfer : (TransferArgs) -> (TransferResult);
+  icrc1_supported_standards : () -> (vec StandardRecord) query;
+
+  mint_elastic_productivity : (Account, nat, text) -> (variant { Ok : nat; Err : text });
+  burn_deflationary : (Account, nat, text) -> (variant { Ok : nat; Err : text });
+  get_total_minted_productivity : () -> (nat) query;
+  get_total_burned_deflationary : () -> (nat) query;
+}

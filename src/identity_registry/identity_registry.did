@@ -1,0 +1,30 @@
+type VerificationTier = variant {
+  Unverified;
+  ProofOfHumanity;
+  PostQuantumBiometric;
+  AutonomousAgent;
+};
+
+type CitizenProfile = record {
+  principal_id : principal;
+  tier : VerificationTier;
+  registered_at : nat64;
+  last_claim_epoch : nat;
+  pqc_public_key_hash : text; // NIST FIPS 204 ML-DSA-65 public key hash
+  is_active : bool;
+};
+
+type RegistryStats = record {
+  total_citizens : nat;
+  active_human_recipients : nat;
+  autonomous_agents : nat;
+};
+
+service : {
+  register_citizen : (pqc_pubkey_hash : text) -> (variant { Ok : CitizenProfile; Err : text });
+  verify_citizen_tier : (citizen : principal, tier : VerificationTier) -> (variant { Ok : bool; Err : text });
+  get_citizen_profile : (citizen : principal) -> (opt CitizenProfile) query;
+  is_eligible_for_claim : (citizen : principal, current_epoch : nat) -> (bool) query;
+  update_last_claim_epoch : (citizen : principal, epoch : nat) -> (variant { Ok : bool; Err : text });
+  get_registry_stats : () -> (RegistryStats) query;
+}

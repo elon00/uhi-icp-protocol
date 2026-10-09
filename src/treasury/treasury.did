@@ -1,0 +1,23 @@
+type DepositRecord = record {
+  sender : principal;
+  amount : nat;
+  source_type : text; // "AI_AGENT", "X402_TAX", "OPTIMUS_FLEET", "DONATION"
+  timestamp : nat64;
+  memo : text;
+};
+
+type TreasuryStats = record {
+  total_pooled : nat;
+  total_disbursed : nat;
+  current_balance : nat;
+  total_tax_from_x402 : nat;
+  total_deposits_count : nat;
+};
+
+service : {
+  deposit_ai_revenue : (amount : nat, source_type : text, memo : text) -> (variant { Ok : nat; Err : text });
+  disburse_to_distribution : (recipient : principal, amount : nat) -> (variant { Ok : nat; Err : text });
+  get_treasury_stats : () -> (TreasuryStats) query;
+  get_recent_deposits : (limit : nat) -> (vec DepositRecord) query;
+  set_distribution_engine : (engine : principal) -> (variant { Ok : bool; Err : text });
+}

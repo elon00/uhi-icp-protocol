@@ -1,0 +1,16 @@
+type GridStats = record {
+  generation : nat;
+  alive_cells : nat;
+  dead_cells : nat;
+  density_basis_points : nat; // 0 to 10000 (0% to 100%)
+  dynamic_multiplier_basis_points : nat; // e.g. 10000 = 1.0x, 12500 = 1.25x
+  entropy_score : nat;
+};
+
+service : {
+  step_generation : () -> (GridStats);
+  get_grid : () -> (vec bool) query;
+  get_stats : () -> (GridStats) query;
+  toggle_cell : (x : nat, y : nat) -> (variant { Ok : bool; Err : text });
+  seed_pattern : (pattern_name : text) -> (GridStats);
+}

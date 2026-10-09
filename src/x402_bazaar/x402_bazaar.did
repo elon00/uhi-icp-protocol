@@ -1,0 +1,38 @@
+type ServiceItem = record {
+  id : nat;
+  provider : principal;
+  title : text;
+  description : text;
+  cost_per_call : nat; // in atomic UHI units (e.g. 100_000_000 = 1 UHI)
+  category : text;     // "ROBOTICS", "AI_INFERENCE", "COMPUTE", "CODE_GEN"
+  total_invocations : nat;
+  is_active : bool;
+};
+
+type PaymentReceipt = record {
+  transaction_id : nat;
+  service_id : nat;
+  consumer : principal;
+  provider : principal;
+  gross_amount : nat;
+  uhi_tax_amount : nat; // 10% routed to Treasury
+  net_amount : nat;     // 90% paid to Provider
+  timestamp : nat64;
+  settlement_proof : text;
+};
+
+type BazaarStats = record {
+  total_services : nat;
+  total_volume : nat;
+  total_tax_routed_to_uhi : nat;
+  total_transactions : nat;
+};
+
+service : {
+  register_service : (title : text, description : text, cost_per_call : nat, category : text) -> (variant { Ok : nat; Err : text });
+  list_services : () -> (vec ServiceItem) query;
+  get_service : (service_id : nat) -> (opt ServiceItem) query;
+  execute_402_payment : (service_id : nat) -> (variant { Ok : PaymentReceipt; Err : text });
+  get_bazaar_stats : () -> (BazaarStats) query;
+  set_treasury_canister : (treasury : principal) -> (variant { Ok : bool; Err : text });
+}

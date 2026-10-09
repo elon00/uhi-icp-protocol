@@ -1,0 +1,25 @@
+{
+  "name": "uhi-icp-protocol",
+  "version": "1.0.0",
+  "description": "Universal High Income (UHI) Protocol on Internet Computer (ICP) with x402 Bazaar, Conway Automaton, PQC Layer, and Web 4.0 Dashboard",
+  "main": "src/frontend/main.js",
+  "scripts": {
+    "test": "python tests/simulate_protocol.py && python tests/simulate_advanced_protocol.py",
+    "deploy:local": "bash scripts/deploy_local.sh",
+    "deploy:mainnet": "bash scripts/deploy_mainnet.sh"
+  },
+  "keywords": [
+    "uhi",
+    "universal-high-income",
+    "elon-musk",
+    "internet-computer",
+    "icp",
+    "motoko",
+    "x402",
+    "conway-game-of-life",
+    "post-quantum-cryptography",
+    "web4"
+  ],
+  "author": "elon00",
+  "license": "MIT"
+}

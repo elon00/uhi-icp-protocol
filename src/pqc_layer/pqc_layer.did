@@ -1,0 +1,25 @@
+type PqcAlgorithm = variant {
+  MlKem768; // NIST FIPS 203
+  MlDsa65;  // NIST FIPS 204
+};
+
+type PqcVerificationResult = record {
+  is_valid : bool;
+  algorithm : text;
+  security_level_bits : nat;
+  lattice_dimension : nat;
+  timestamp : nat64;
+};
+
+type QuantumProof = record {
+  public_key : text;
+  signature_or_ciphertext : text;
+  message_hash : text;
+  algorithm : PqcAlgorithm;
+};
+
+service : {
+  verify_quantum_signature : (proof : QuantumProof) -> (PqcVerificationResult);
+  generate_lattice_commitment : (preimage : text) -> (text) query;
+  get_security_parameters : (algo : PqcAlgorithm) -> (record { name : text; security_bits : nat; key_size_bytes : nat }) query;
+}

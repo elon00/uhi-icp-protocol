@@ -1,0 +1,8 @@
+[package]
+name = "uhi-icp-protocol"
+version = "1.0.0"
+description = "Universal High Income Protocol on Internet Computer"
+license = "MIT"
+
+[dependencies]
+base = "0.11.1"
