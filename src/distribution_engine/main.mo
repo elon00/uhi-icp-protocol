@@ -71,6 +71,9 @@ shared ({ caller = initializer }) actor class DistributionEngine() = this {
       return #Err("Unauthorized: Only admin can advance epoch");
     };
 
+    if (conway_multiplier_bps_input < 10000 or conway_multiplier_bps_input > 15000) {
+      return #Err("Multiplier outside permitted 1.0x–1.5x policy range");
+    };
     current_epoch += 1;
     dynamic_multiplier_bps := if (conway_multiplier_bps_input >= 10000) conway_multiplier_bps_input else 10000;
     epoch_claims_count := 0;
@@ -96,34 +99,7 @@ shared ({ caller = initializer }) actor class DistributionEngine() = this {
   };
 
   public shared ({ caller }) func claim_uhi_dividend(pqc_proof : Text) : async { #Ok : ClaimRecord; #Err : Text } {
-    let key = Principal.toText(caller) # "_" # Nat.toText(current_epoch);
-    if (Option.get(citizen_claimed_in_epoch.get(key), false)) {
-      return #Err("UHI Dividend already claimed for this epoch");
-    };
-
-    if (Text.size(pqc_proof) < 8) {
-      return #Err("Invalid PQC proof: Lattice signature required");
-    };
-
-    let effectivePayout = calcEffectivePayout();
-    let record : ClaimRecord = {
-      citizen = caller;
-      epoch = current_epoch;
-      amount = effectivePayout;
-      conway_multiplier_bps = dynamic_multiplier_bps;
-      timestamp = Nat64.fromIntWrap(Time.now());
-      pqc_proof = pqc_proof;
-    };
-
-    citizen_claimed_in_epoch.put(key, true);
-    claims_history.add(record);
-
-    epoch_claims_count += 1;
-    epoch_disbursed_sum += effectivePayout;
-    total_all_time_claims += 1;
-    total_all_time_disbursed += effectivePayout;
-
-    #Ok(record)
+    #Err("DISABLED: claim requires verified human eligibility, authentic PQC verification and real on-ledger payout")
   };
 
   public query func get_distribution_stats() : async DistributionStats {
