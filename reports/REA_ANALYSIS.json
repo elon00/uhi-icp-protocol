@@ -1,0 +1,113 @@
+{
+  "engine": "REA_Reverse_Engineer_Anything",
+  "status": "STRUCTURE_RECONSTRUCTED",
+  "analyzed_files": 35,
+  "manifest": {
+    "dfx.json": {
+      "bytes": 1522
+    },
+    "LICENSE": {
+      "bytes": 1112
+    },
+    "mops.toml": {
+      "bytes": 178
+    },
+    "package.json": {
+      "bytes": 742
+    },
+    "README.md": {
+      "bytes": 12323
+    },
+    "scripts\\deploy_local.sh": {
+      "bytes": 1578
+    },
+    "scripts\\deploy_mainnet.sh": {
+      "bytes": 2182
+    },
+    "scripts\\rea_inspector.py": {
+      "bytes": 1485
+    },
+    "scripts\\rsi_engine.py": {
+      "bytes": 2039
+    },
+    "tests\\reality_check_harness.py": {
+      "bytes": 1250
+    },
+    "tests\\simulate_advanced_protocol.py": {
+      "bytes": 8735
+    },
+    "tests\\simulate_protocol.py": {
+      "bytes": 6224
+    },
+    ".github\\workflows\\ci.yml": {
+      "bytes": 864
+    },
+    ".github\\workflows\\qmoosa-rsi-rea-sync.yml": {
+      "bytes": 531
+    },
+    "src\\conway_engine\\conway_engine.did": {
+      "bytes": 523
+    },
+    "src\\conway_engine\\main.mo": {
+      "bytes": 4720
+    },
+    "src\\distribution_engine\\distribution_engine.did": {
+      "bytes": 952
+    },
+    "src\\distribution_engine\\main.mo": {
+      "bytes": 4479
+    },
+    "src\\frontend\\ai_assistant.js": {
+      "bytes": 6062
+    },
+    "src\\frontend\\conway.js": {
+      "bytes": 5638
+    },
+    "src\\frontend\\index.html": {
+      "bytes": 14001
+    },
+    "src\\frontend\\main.js": {
+      "bytes": 9542
+    },
+    "src\\frontend\\qr.js": {
+      "bytes": 2684
+    },
+    "src\\frontend\\style.css": {
+      "bytes": 16327
+    },
+    "src\\frontend\\wallet.js": {
+      "bytes": 2485
+    },
+    "src\\identity_registry\\identity_registry.did": {
+      "bytes": 1035
+    },
+    "src\\identity_registry\\main.mo": {
+      "bytes": 5496
+    },
+    "src\\pqc_layer\\main.mo": {
+      "bytes": 2178
+    },
+    "src\\pqc_layer\\pqc_layer.did": {
+      "bytes": 703
+    },
+    "src\\treasury\\main.mo": {
+      "bytes": 3319
+    },
+    "src\\treasury\\treasury.did": {
+      "bytes": 812
+    },
+    "src\\uhi_token\\main.mo": {
+      "bytes": 6060
+    },
+    "src\\uhi_token\\uhi_token.did": {
+      "bytes": 1615
+    },
+    "src\\x402_bazaar\\main.mo": {
+      "bytes": 5521
+    },
+    "src\\x402_bazaar\\x402_bazaar.did": {
+      "bytes": 1263
+    }
+  },
+  "timestamp": 1794059793
+}
