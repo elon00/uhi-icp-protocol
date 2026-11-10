@@ -1,0 +1,36 @@
+name: Motoko Real Build (Zero Mainnet Cycles)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, safety/english-reality-gates]
+    paths:
+      - 'src/**'
+      - 'dfx.json'
+      - '.github/workflows/motoko-build.yml'
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  compile-real-canisters:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install DFINITY SDK
+        uses: dfinity/setup-dfx@main
+      - name: Record exact toolchain version
+        run: |
+          dfx --version
+          dfx cache show
+      - name: Start isolated local ICP replica (no mainnet cycles)
+        run: dfx start --background --clean
+      - name: Create local canister IDs required by dfx build
+        run: dfx canister create --all --network local
+      - name: Compile real Motoko and asset canisters
+        run: dfx build --network local
+      - name: Summarize scope
+        if: always()
+        run: |
+          echo 'This workflow compiles canister source. It does not exercise PocketIC, cryptographic proofs, real ICRC ledger settlement, or mainnet deployment.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'A green build is not a mainnet-ready certification. Strict reality gates stay active.' >> "$GITHUB_STEP_SUMMARY"

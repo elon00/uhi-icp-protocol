@@ -21,28 +21,10 @@ class MultiWalletAdapter {
             this.isConnected = true;
           }
         } else {
-          // Fallback simulation for dev/sandbox
-          this.principal = 'rrkah-fqaaa-aaaaa-aaaaq-cai-plug-user';
-          this.currentWallet = 'Plug Wallet';
-          this.isConnected = true;
+          throw new Error('Plug wallet extension is unavailable. No simulated connection permitted.');
         }
-      } else if (walletType === 'ii') {
-        // Internet Identity
-        this.principal = '7x2k4-5yaaa-aaaan-qacia-cai-ii-citizen';
-        this.currentWallet = 'Internet Identity';
-        this.isConnected = true;
-      } else if (walletType === 'nfid') {
-        this.principal = 'bw4dl-myaaa-aaaaa-aaasq-cai-nfid-id';
-        this.currentWallet = 'NFID';
-        this.isConnected = true;
-      } else if (walletType === 'stoic') {
-        this.principal = 'stoic-7m93k-pqx2z-cai-custody';
-        this.currentWallet = 'Stoic Wallet';
-        this.isConnected = true;
-      } else if (walletType === 'bitfinity') {
-        this.principal = 'bitf-9x881-zkv4a-cai-evm-bridge';
-        this.currentWallet = 'Bitfinity';
-        this.isConnected = true;
+      } else {
+        throw new Error(walletType + ' requires an authenticated wallet integration; no synthetic principals permitted.');
       }
 
       if (this.onAccountChanged) {
@@ -53,6 +35,7 @@ class MultiWalletAdapter {
         });
       }
 
+      if (!this.isConnected || !this.principal) throw new Error('Wallet authentication did not complete.');
       return { success: true, principal: this.principal };
     } catch (err) {
       console.error('Wallet connection error:', err);

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
+
+# Zero-cycle preflight. Deny deployment until all required reality gates pass.
+python3 "$(dirname "$0")/reality_gate.py"
+echo "Static preflight alone is not production authorization."
 
 echo "=========================================================="
 echo " UHI Protocol Mainnet Deployment Pipeline (Internet Computer)"

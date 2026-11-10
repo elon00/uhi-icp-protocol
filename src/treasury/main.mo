@@ -28,9 +28,9 @@ shared ({ caller = initializer }) actor class Treasury() = this {
   private var admin : Principal = initializer;
   private var distribution_engine : ?Principal = null;
 
-  private var total_pooled : Nat = 10_000_000_00000000; // Seed pool
+  private var total_pooled : Nat = 0; // No unverified seed funding
   private var total_disbursed : Nat = 0;
-  private var current_balance : Nat = 10_000_000_00000000;
+  private var current_balance : Nat = 0;
   private var total_tax_from_x402 : Nat = 0;
 
   private let deposits = Buffer.Buffer<DepositRecord>(100);
@@ -48,50 +48,14 @@ shared ({ caller = initializer }) actor class Treasury() = this {
     source_type : Text,
     memo : Text
   ) : async { #Ok : Nat; #Err : Text } {
-    if (amount == 0) {
-      return #Err("Deposit amount must be positive");
-    };
-
-    let record : DepositRecord = {
-      sender = caller;
-      amount = amount;
-      source_type = source_type;
-      timestamp = Nat64.fromIntWrap(Time.now());
-      memo = memo;
-    };
-
-    deposits.add(record);
-    total_pooled += amount;
-    current_balance += amount;
-
-    if (source_type == "X402_TAX") {
-      total_tax_from_x402 += amount;
-    };
-
-    #Ok(current_balance)
+    #Err("DISABLED: no verified ICRC ledger transfer proof; accounting-only deposits are unsafe")
   };
 
   public shared ({ caller }) func disburse_to_distribution(
     recipient : Principal,
     amount : Nat
   ) : async { #Ok : Nat; #Err : Text } {
-    let isAuthorized = switch (distribution_engine) {
-      case (?engine) { caller == engine or caller == admin };
-      case null { caller == admin };
-    };
-
-    if (not isAuthorized) {
-      return #Err("Unauthorized: Only distribution engine or admin can disburse funds");
-    };
-
-    if (amount > current_balance) {
-      return #Err("Insufficient treasury balance");
-    };
-
-    current_balance -= amount;
-    total_disbursed += amount;
-
-    #Ok(current_balance)
+    #Err("DISABLED: no ICRC ledger disbursement or block proof is implemented")
   };
 
   public query func get_treasury_stats() : async TreasuryStats {
