@@ -8,3 +8,6 @@ dist/
 Thumbs.db
 __pycache__/
 *.pyc
+
+# Lean 4 build artifacts
+lean_verify/.lake/
